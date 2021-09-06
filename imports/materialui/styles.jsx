@@ -14,7 +14,7 @@
 
  */
 
-import {isMobile} from '/imports/libs/deviceVerify';
+import { isMobile } from '/imports/libs/deviceVerify';
 
 const primaryColor = '#5a9902';
 const secondaryColor = '#3e6b01';
@@ -73,7 +73,9 @@ const subtituloInfoComplementar = {
 const avisoFinalPag = {
   width: '100%',
   minHeight: 300,
-  display: 'flex', justifyContent: 'center', alignItems: 'center',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
   backgroundColor: '#dcd9d5',
 };
 
@@ -112,7 +114,7 @@ const row = {
 const form = {
   display: 'flex',
   flexDirection: 'column',
-  paddingTop: 20,//isMobile ? 40 : 40,
+  paddingTop: 20, //isMobile ? 40 : 40,
   marginBottom: 40,
   paddingBottom: 100,
 };
@@ -146,7 +148,7 @@ const transition = {
 // Boxes
 const boxShadow = {
   boxShadow:
-      '0 10px 30px -12px rgba(0, 0, 0, 0.42), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)',
+    '0 10px 30px -12px rgba(0, 0, 0, 0.42), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)',
 };
 
 // Button
@@ -156,11 +158,9 @@ export {
   // theme
   primaryColor,
   secondaryColor,
-
   //Backgorund colors
   systemBackgroundColor,
   pageBackgroundColor,
-
   // pages
   titleTextColor,
   titleSecondaryTextColor,
@@ -168,7 +168,6 @@ export {
   subtituloInfoComplementar,
   fabContainer,
   containerHome,
-
   // messages
   warningColor,
   dangerColor,
@@ -176,30 +175,21 @@ export {
   infoColor,
   textColorMessages,
   textColorGray,
-
   //two column
   row,
   column,
-
   //form
   form,
-
   logo,
-
   //form group
   formGroup,
   formGroup2,
-
   // transition
   transition,
-
   // box
   boxShadow,
-
   // button
   textButtonColor,
-
   fieldContainer,
-
   avisoFinalPag,
 };

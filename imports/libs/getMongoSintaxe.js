@@ -3,13 +3,13 @@ const getMongoDBFilterSintaxe = (operator, value, type) => {
     value = Number(value);
   }
   if (type == 'date') {
-    value = (new Date(value)).toISOString();
+    value = new Date(value).toISOString();
   }
   switch (operator) {
     case '==':
       return value;
     case '!=':
-      return {$ne: value};
+      return { $ne: value };
     case 'initwith':
       return new RegExp(`^${value}.*`, 'i');
     case 'contains':
@@ -17,17 +17,17 @@ const getMongoDBFilterSintaxe = (operator, value, type) => {
     case '!contains':
       return new RegExp(`^((?!${value}).)*$`, 'i');
     case '>':
-      return {$gt: value};
+      return { $gt: value };
     case '>=':
-      return {$gte: value};
+      return { $gte: value };
     case '<':
-      return {$lt: value};
+      return { $lt: value };
     case '<=':
-      return {$lte: value};
+      return { $lte: value };
     case 'in':
-      return {$in: value};
+      return { $in: value };
     case '!in':
-      return {$nin: value};
+      return { $nin: value };
     default:
       return value;
   }

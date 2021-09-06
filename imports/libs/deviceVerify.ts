@@ -1,7 +1,6 @@
-export const iOS = process.browser &&
-    /iPad|iPhone|iPod/.test(window.$isMobile || navigator.userAgent);
-export const isMobile = /iPhone|iPad|iPod|Android/i.test(
-    window.$isMobile || navigator.userAgent);
+export const iOS =
+  process.browser && /iPad|iPhone|iPod/.test(window.$isMobile || navigator.userAgent);
+export const isMobile = /iPhone|iPad|iPod|Android/i.test(window.$isMobile || navigator.userAgent);
 
 export const setUserAgent = (window, userAgent) => {
   const userAgentProp = {
