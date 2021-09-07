@@ -1,6 +1,6 @@
-import {Accounts} from 'meteor/accounts-base';
-import {Meteor} from 'meteor/meteor';
-import {userprofileApi} from '../userprofile/api/UserProfileApi';
+import { Accounts } from 'meteor/accounts-base';
+import { Meteor } from 'meteor/meteor';
+import { userprofileApi } from '../userprofile/api/UserProfileApi';
 
 const rootPath = Meteor.rootPath;
 const absolutePath = Meteor.absolutePath;
@@ -18,16 +18,16 @@ function createDefautUser() {
       password: 'admin@mrb.com',
     });
     Meteor.users.update(
-        {_id: createdUserId},
-        {
-          $set: {
-            'emails.0.verified': true,
-            profile: {
-              name: 'Admin',
-              email: 'admin@mrb.com',
-            },
+      { _id: createdUserId },
+      {
+        $set: {
+          'emails.0.verified': true,
+          profile: {
+            name: 'Admin',
+            email: 'admin@mrb.com',
           },
         },
+      },
     );
 
     userprofileApi.collectionInstance.insert({

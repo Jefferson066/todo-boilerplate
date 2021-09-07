@@ -1,6 +1,6 @@
 export enum EnumUserPresences {
   ONLINE = 'Online',
-  OFFLINE = 'Offline'
+  OFFLINE = 'Offline',
 }
 
 export enum EnumUserRoles {

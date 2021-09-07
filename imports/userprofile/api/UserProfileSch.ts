@@ -11,7 +11,6 @@ export const userProfileSch = {
     label: 'UserName',
     defaultValue: '',
     optional: true,
-
   },
   email: {
     type: String,
@@ -26,6 +25,24 @@ export const userProfileSch = {
     optional: false,
     mask: '(##) ####-####',
   },
+  empresa: {
+    type: String,
+    label: 'Empresa',
+    defaultValue: '',
+    optional: true,
+  },
+  birthDate: {
+    type: Date,
+    label: 'Data de Nascimento',
+    defaultValue: '',
+    optional: true,
+  },
+  sex: {
+    type: String,
+    label: 'Sexo',
+    defaultValue: '',
+    optional: true,
+  },
   roles: {
     type: [String],
     label: 'Access profile',
@@ -34,13 +51,14 @@ export const userProfileSch = {
     componentName: 'ChipSelect',
     options: [
       {
-        value: 'Administrador', label: 'Admnistrador',
+        value: 'Administrador',
+        label: 'Admnistrador',
       },
       {
-        value: 'Usuario', label: 'Usuário',
+        value: 'Usuario',
+        label: 'Usuário',
       },
     ],
-
   },
 };
 

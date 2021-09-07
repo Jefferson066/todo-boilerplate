@@ -1,9 +1,9 @@
 // region Imports
-import {Meteor} from 'meteor/meteor';
-import {Accounts} from 'meteor/accounts-base';
-import {OfflineBaseApi} from '../../api/offlinebase';
-import {userProfileSch} from './UserProfileSch';
-import {getUser, userprofileData} from '../../libs/getUser';
+import { Meteor } from 'meteor/meteor';
+import { Accounts } from 'meteor/accounts-base';
+import { OfflineBaseApi } from '../../api/offlinebase';
+import { userProfileSch } from './UserProfileSch';
+import { getUser, userprofileData } from '../../libs/getUser';
 import settings from '../../../settings.json';
 
 // endregion
@@ -25,7 +25,7 @@ class UserProfileApi extends OfflineBaseApi {
     this.afterInsert = this.afterInsert.bind(this);
 
     if (Meteor.isServer) {
-      this.registerMethod('sendVerificationEmail', userData => {
+      this.registerMethod('sendVerificationEmail', (userData) => {
         check(userData, Object);
         if (Meteor.isServer && userData) {
           if (userData._id) {
@@ -38,7 +38,7 @@ class UserProfileApi extends OfflineBaseApi {
           }
         }
       });
-      this.registerMethod('sendResetPasswordEmail', userData => {
+      this.registerMethod('sendResetPasswordEmail', (userData) => {
         check(userData, Object);
         if (Meteor.isServer && userData) {
           if (userData._id) {
@@ -56,28 +56,23 @@ class UserProfileApi extends OfflineBaseApi {
         }
         return true;
       });
-
     }
 
     this.addPublication('getListOfusers', (filter = {}, options, userDoc) => {
-
       const queryOptions = {
-        fields: {'photo': 1, 'email': 1, 'username': 1},
+        fields: { photo: 1, email: 1, username: 1 },
       };
 
-      return this.collectionInstance.find(Object.assign({},
-          {...filter}), queryOptions);
+      return this.collectionInstance.find(Object.assign({}, { ...filter }), queryOptions);
     });
 
     this.addPublication('getLoggedUserProfile', () => {
-
       const user = Meteor.user();
 
       if (!user) {
         return;
       }
-      return this.collectionInstance.find(
-          {email: user ? user.profile.email : null});
+      return this.collectionInstance.find({ email: user ? user.profile.email : null });
     });
 
     userprofileData.collectionInstance = this.collectionInstance;
@@ -101,18 +96,16 @@ class UserProfileApi extends OfflineBaseApi {
   };
 
   serverInsert(dataObj, context) {
-
     let insertId = null;
     try {
-      const {password} = dataObj;
+      const { password } = dataObj;
       dataObj = this.checkDataBySchema(dataObj);
       if (password) {
-        dataObj = Object.assign({}, dataObj, {password});
+        dataObj = Object.assign({}, dataObj, { password });
       }
 
       this.includeAuditData(dataObj, 'insert');
       if (this.beforeInsert(dataObj, context)) {
-
         this.registrarUserProfileNoMeteor(dataObj);
         delete dataObj.password;
         if (!dataObj.roles) {
@@ -121,47 +114,55 @@ class UserProfileApi extends OfflineBaseApi {
           dataObj.roles.push('Usuario');
         }
 
-        const userProfile = this.collectionInstance.findOne(
-            {email: dataObj.email});
+        const userProfile = this.collectionInstance.findOne({ email: dataObj.email });
         if (!userProfile) {
           dataObj.otheraccounts = [
             {
               _id: dataObj._id,
               service: settings.service,
-            }];
+            },
+          ];
 
           insertId = this.collectionInstance.insert(dataObj);
 
           delete dataObj.otheraccounts;
-          Meteor.users.update({_id: dataObj._id || insertId}, {
-            $set: {
-              profile: {
-                name: dataObj.username,
-                email: dataObj.email,
+          Meteor.users.update(
+            { _id: dataObj._id || insertId },
+            {
+              $set: {
+                profile: {
+                  name: dataObj.username,
+                  email: dataObj.email,
+                },
               },
             },
-          });
+          );
         } else {
-
           insertId = userProfile._id;
 
-          Meteor.users.update({_id: dataObj._id}, {
-            $set: {
-              profile: {
-                name: dataObj.username,
-                email: dataObj.email,
-              },
-              roles: dataObj.roles,
-            },
-          });
-          this.collectionInstance.update({_id: userProfile._id}, {
-            $addToSet: {
-              otheraccounts: {
-                _id: dataObj._id,
-                service: settings.service,
+          Meteor.users.update(
+            { _id: dataObj._id },
+            {
+              $set: {
+                profile: {
+                  name: dataObj.username,
+                  email: dataObj.email,
+                },
+                roles: dataObj.roles,
               },
             },
-          });
+          );
+          this.collectionInstance.update(
+            { _id: userProfile._id },
+            {
+              $addToSet: {
+                otheraccounts: {
+                  _id: dataObj._id,
+                  service: settings.service,
+                },
+              },
+            },
+          );
         }
 
         dataObj.password = password;
@@ -176,7 +177,6 @@ class UserProfileApi extends OfflineBaseApi {
     } catch (insertError) {
       throw insertError;
     }
-
   }
 
   /**
@@ -198,37 +198,37 @@ class UserProfileApi extends OfflineBaseApi {
 
   addPublicationMeteorUsers = () => {
     if (Meteor.isServer) {
-      Meteor.publish('statusCadastroUserProfile', userId => {
+      Meteor.publish('statusCadastroUserProfile', (userId) => {
         check(userId, String);
         const user = getUser();
 
         if (user.roles.indexOf('Administrador') !== -1) {
           return Meteor.users.find(
-              {},
-              {
-                fields: {
-                  _id: 1,
-                  username: 1,
-                  'emails.verified': 1,
-                  'emails.address': 1,
-                  roles: 1,
-                  productProfile: 1,
-                },
+            {},
+            {
+              fields: {
+                _id: 1,
+                username: 1,
+                'emails.verified': 1,
+                'emails.address': 1,
+                roles: 1,
+                productProfile: 1,
               },
+            },
           );
         }
-        return Meteor.users.find({_id: userId});
+        return Meteor.users.find({ _id: userId });
       });
-      Meteor.publish('user', function() {
+      Meteor.publish('user', function () {
         if (this.userId) {
           return Meteor.users.find(
-              {_id: this.userId},
-              {
-                fields: {
-                  emails: 1,
-                  username: 1,
-                },
+            { _id: this.userId },
+            {
+              fields: {
+                emails: 1,
+                username: 1,
               },
+            },
           );
         }
         return this.ready();
@@ -242,13 +242,13 @@ class UserProfileApi extends OfflineBaseApi {
       Meteor.publish('userprofile-profile', function() {
         if (this.userId) {
           return Meteor.users.find(
-              {_id: this.userId},
-              {
-                fields: {
-                  'emails.address': 1,
-                  productProfile: 1,
-                },
+            { _id: this.userId },
+            {
+              fields: {
+                'emails.address': 1,
+                productProfile: 1,
               },
+            },
           );
         }
         this.ready();
@@ -272,14 +272,12 @@ class UserProfileApi extends OfflineBaseApi {
 
   beforeUpdate(docObj, context) {
     const user = getUser();
-    if (!docObj._id ||
-        (user._id !== docObj._id && user.roles.indexOf('Administrador') ===
-            -1)) {
-      throw new Meteor.Error('Acesso negado',
-          `Vocẽ não tem permissão para alterar esses dados`);
+    if (!docObj._id || (user._id !== docObj._id && user.roles.indexOf('Administrador') === -1)) {
+      throw new Meteor.Error('Acesso negado', `Vocẽ não tem permissão para alterar esses dados`);
     }
 
-    if (user.roles.indexOf('Administrador') === -1) {  // prevent user change your self roles
+    if (user.roles.indexOf('Administrador') === -1) {
+      // prevent user change your self roles
       delete docObj.roles;
     }
 
@@ -288,7 +286,7 @@ class UserProfileApi extends OfflineBaseApi {
 
   beforeRemove(docObj, context) {
     super.beforeRemove(docObj, context);
-    Meteor.users.remove({_id: docObj._id});
+    Meteor.users.remove({ _id: docObj._id });
     return true;
   }
 
@@ -301,10 +299,14 @@ class UserProfileApi extends OfflineBaseApi {
     }
   }
 
-  insertNewUser(userData, callback = (e, r) => {console.log(e, r);}) {
+  insertNewUser(
+    userData,
+    callback = (e, r) => {
+      console.log(e, r);
+    },
+  ) {
     this.callMethod('insert', userData, callback);
   }
-
 }
 
 export const userprofileApi = new UserProfileApi();
