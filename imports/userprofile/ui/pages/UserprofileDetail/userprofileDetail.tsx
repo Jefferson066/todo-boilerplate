@@ -87,6 +87,7 @@ const UserProfileDetail = ({ screenState, loading, user, save, history, viewer, 
 };
 
 export const UserProfileDetailContainer = withTracker((props) => {
+  console.log(props);
   const { screenState, id } = props;
   const subHandle = userprofileApi.subscribe('default', { _id: id });
   const user = subHandle.ready() ? userprofileApi.findOne({ _id: id }) : {};
