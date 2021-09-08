@@ -1,5 +1,5 @@
-import {Meteor} from 'meteor/meteor';
-import {Email} from 'meteor/email';
+import { Meteor } from 'meteor/meteor';
+import { Email } from 'meteor/email';
 import settings from '/settings';
 
 const configureMailServer = () => {
@@ -7,11 +7,12 @@ const configureMailServer = () => {
   process.env.MAIL_URL = settings.mail_url_smtp;
 };
 
-export const getHTMLEmailTemplate = (
-    title = settings.name, text = 'Message', footer) => {
+export const getHTMLEmailTemplate = (title = settings.name, text = 'Message', footer) => {
   SSR.compileTemplate('htmlEmail', Assets.getText('templateEmail.html'));
   const email = SSR.render('htmlEmail', {
-    title, text, footer,
+    title,
+    text,
+    footer,
   });
   console.log(email);
   return email;
@@ -25,7 +26,11 @@ function sendEmail(to, from, subject, msg, attachments = [], callback) {
   // this.unblock();
   try {
     const a = Email.send({
-      to, from, subject, html: getHTMLEmailTemplate(subject, msg), attachments,
+      to,
+      from,
+      subject,
+      html: getHTMLEmailTemplate(subject, msg),
+      attachments,
     });
     return 'EMAIL OK';
   } catch (e) {

@@ -1,8 +1,8 @@
 // server/imports/oauth-facebook.js
 
-import {ServiceConfiguration} from 'meteor/service-configuration';
-import {OAuth} from 'meteor/oauth';
-import {HTTP} from 'meteor/http';
+import { ServiceConfiguration } from 'meteor/service-configuration';
+import { OAuth } from 'meteor/oauth';
+import { HTTP } from 'meteor/http';
 import crypto from 'crypto';
 import _ from 'lodash';
 import settings from '../../settings.json';
@@ -41,10 +41,9 @@ const getIdentity = (accessToken, fields) => {
       },
     }).data;
   } catch (err) {
-    throw _.extend(
-        new Error(`Failed to fetch identity from Facebook. ${err.message}`),
-        {response: err.response},
-    );
+    throw _.extend(new Error(`Failed to fetch identity from Facebook. ${err.message}`), {
+      response: err.response,
+    });
   }
 };
 
@@ -62,12 +61,12 @@ const handleAuthFromAccessToken = (accessToken, expiresAt) => {
 
   return {
     serviceData,
-    options: {profile: {name: identity.name, email: serviceData.email}},
+    options: { profile: { name: identity.name, email: serviceData.email } },
   };
 };
 
 const registerFacebookMobileLoginHandler = () => {
-  Accounts.registerLoginHandler('facebookMobileLogin', params => {
+  Accounts.registerLoginHandler('facebookMobileLogin', (params) => {
     const data = params.facebookMobileLogin;
 
     console.log('>>>Data:', data);
@@ -77,23 +76,23 @@ const registerFacebookMobileLoginHandler = () => {
     }
 
     const identity = handleAuthFromAccessToken(
-        data.accessToken,
-        (+new Date()) + (1000 * data.expirationTime),
+      data.accessToken,
+      +new Date() + 1000 * data.expirationTime,
     );
 
     console.log('>>>identity:', identity);
 
     const facebookUser = Accounts.updateOrCreateUserFromExternalService(
-        'facebook',
-        {
-          ...identity.serviceData,
-        },
-        identity.options,
+      'facebook',
+      {
+        ...identity.serviceData,
+      },
+      identity.options,
     );
-    const user = {...facebookUser};
+    const user = { ...facebookUser };
 
     user.username = identity.serviceData.name;
-    user.emails = [{address: identity.serviceData.email}];
+    user.emails = [{ address: identity.serviceData.email }];
     user.email = identity.serviceData.email;
     user._id = user.userId;
     user.roles = ['Usuario'];
@@ -109,13 +108,13 @@ const init = () => {
   if (!settings || settings.settingsFacebook) return;
 
   ServiceConfiguration.configurations.upsert(
-      {service: 'facebook'},
-      {
-        $set: {
-          appId: settings.settingsFacebook.appId,
-          secret: settings.settingsFacebook.secret,
-        },
+    { service: 'facebook' },
+    {
+      $set: {
+        appId: settings.settingsFacebook.appId,
+        secret: settings.settingsFacebook.secret,
       },
+    },
   );
 
   registerFacebookMobileLoginHandler();

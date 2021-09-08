@@ -14,7 +14,7 @@ const allowScriptOrigin = [
   'localhost:3000',
   `${Meteor.absoluteUrl()}`,
 ];
-allowScriptOrigin.forEach(o => {
+allowScriptOrigin.forEach((o) => {
   return BrowserPolicy.content.allowScriptOrigin(o);
 });
 
@@ -27,7 +27,7 @@ const allowStyleOrigin = [
   'localhost:3000',
   `${Meteor.absoluteUrl()}`,
 ];
-allowStyleOrigin.forEach(o => {
+allowStyleOrigin.forEach((o) => {
   return BrowserPolicy.content.allowStyleOrigin(o);
 });
 
@@ -37,7 +37,7 @@ const allowFontOrigin = [
   'localhost:3000',
   `${Meteor.absoluteUrl()}`,
 ];
-allowFontOrigin.forEach(o => {
+allowFontOrigin.forEach((o) => {
   return BrowserPolicy.content.allowDataUrlForAll(o);
 });
 
@@ -49,10 +49,13 @@ const allowAll = [
   'localhost:3000',
   `${Meteor.absoluteUrl()}`,
 ];
-allowAll.forEach(o => {
+allowAll.forEach((o) => {
   return BrowserPolicy.content.allowOriginForAll(o);
 });
 
-BrowserPolicy.content.allowInlineScripts('fonts.gstatic.com', 'localhost:3000',
-    `${Meteor.absoluteUrl()}`);
+BrowserPolicy.content.allowInlineScripts(
+  'fonts.gstatic.com',
+  'localhost:3000',
+  `${Meteor.absoluteUrl()}`,
+);
 BrowserPolicy.content.allowOriginForAll('blob:');

@@ -1,11 +1,11 @@
 // server/imports/oauth-facebook.js
 
-import {ServiceConfiguration} from 'meteor/service-configuration';
-import {Meteor} from 'meteor/meteor';
-import {OAuth} from 'meteor/oauth';
-import {HTTP} from 'meteor/http';
+import { ServiceConfiguration } from 'meteor/service-configuration';
+import { Meteor } from 'meteor/meteor';
+import { OAuth } from 'meteor/oauth';
+import { HTTP } from 'meteor/http';
 import _ from 'lodash';
-import {userprofileApi} from '../userprofile/api/UserProfileApi';
+import { userprofileApi } from '../userprofile/api/UserProfileApi';
 import settings from '../../settings.json';
 
 const whitelistedFields = [
@@ -24,10 +24,9 @@ const whitelistedFields = [
 // https://developers.google.com/identity/sign-in/ios/backend-auth
 const validIdToken = (idToken, config) => {
   try {
-    const res = HTTP.get(
-        'https://www.googleapis.com/oauth2/v3/tokeninfo',
-        {params: {id_token: idToken}},
-    );
+    const res = HTTP.get('https://www.googleapis.com/oauth2/v3/tokeninfo', {
+      params: { id_token: idToken },
+    });
 
     console.log('#############################################');
     console.log('validIdToken', idToken, config);
@@ -49,29 +48,25 @@ const validIdToken = (idToken, config) => {
 
 const getIdentity = (accessToken) => {
   try {
-    return HTTP.get(
-        'https://www.googleapis.com/oauth2/v1/userinfo',
-        {params: {access_token: accessToken}},
-    ).data;
+    return HTTP.get('https://www.googleapis.com/oauth2/v1/userinfo', {
+      params: { access_token: accessToken },
+    }).data;
   } catch (err) {
-    throw _.extend(
-        new Error(`Failed to fetch identity from Google. ${err.message}`),
-        {response: err.response},
-    );
+    throw _.extend(new Error(`Failed to fetch identity from Google. ${err.message}`), {
+      response: err.response,
+    });
   }
 };
 
 const getScopes = (accessToken) => {
   try {
-    return HTTP.get(
-        'https://www.googleapis.com/oauth2/v1/tokeninfo',
-        {params: {access_token: accessToken}},
-    ).data.scope.split(' ');
+    return HTTP.get('https://www.googleapis.com/oauth2/v1/tokeninfo', {
+      params: { access_token: accessToken },
+    }).data.scope.split(' ');
   } catch (err) {
-    throw _.extend(
-        new Error(`Failed to fetch tokeninfo from Google. ${err.message}`),
-        {response: err.response},
-    );
+    throw _.extend(new Error(`Failed to fetch tokeninfo from Google. ${err.message}`), {
+      response: err.response,
+    });
   }
 };
 
@@ -109,7 +104,7 @@ const handleAuthFromAccessToken = (accessToken, expiresAt) => {
 
   return {
     serviceData,
-    options: {profile: {name: identity.name, email: serviceData.email}},
+    options: { profile: { name: identity.name, email: serviceData.email } },
   };
 };
 
@@ -123,17 +118,15 @@ const registerGoogleMobileLoginHandler = () => {
       return undefined;
     }
 
-    const serviceConfig = ServiceConfiguration.configurations.findOne(
-        {service: 'google'});
+    const serviceConfig = ServiceConfiguration.configurations.findOne({ service: 'google' });
     if (!serviceConfig) {
       throw new ServiceConfiguration.ConfigError();
     }
 
     console.log('#### serviceConfig', serviceConfig);
 
-    const expiresAt = (+new Date()) +
-        (1000 *
-            parseInt(loginRequest.accessTokenExpirationDate || 6000000, 10));
+    const expiresAt =
+      +new Date() + 1000 * parseInt(loginRequest.accessTokenExpirationDate || 6000000, 10);
     const accessToken = loginRequest.accessToken;
     const idToken = loginRequest.idToken;
 
@@ -167,13 +160,11 @@ const registerGoogleMobileLoginHandler = () => {
     _.extend(serviceData, fields);
 
     if (loginRequest.serverAuthCode) {
-      const authCodes = exchangeAuthCode(loginRequest.serverAuthCode,
-          serviceConfig);
+      const authCodes = exchangeAuthCode(loginRequest.serverAuthCode, serviceConfig);
 
       if (authCodes) {
         serviceData.accessToken = authCodes.access_token;
-        serviceData.expiresAt = (+new Date()) +
-            (1000 * parseInt(authCodes.expires_in, 10));
+        serviceData.expiresAt = +new Date() + 1000 * parseInt(authCodes.expires_in, 10);
         serviceData.idToken = authCodes.id_token;
 
         if (authCodes.refresh_token) {
@@ -189,13 +180,12 @@ const registerGoogleMobileLoginHandler = () => {
     user.name = `${serviceData.name}`;
     user.email = serviceData.email;
 
-    const userProfile = userprofileApi.collectionInstance.findOne(
-        {email: user.email});
+    const userProfile = userprofileApi.collectionInstance.findOne({ email: user.email });
 
     if (!userProfile) {
       console.log('New Google User', user);
       user.roles = ['Usuario'];
-      user.otheraccounts = [{_id: user._id, service: 'Google'}];
+      user.otheraccounts = [{ _id: user._id, service: 'Google' }];
 
       const userProfileID = userprofileApi.collectionInstance.insert(user);
 
@@ -212,12 +202,10 @@ const registerGoogleMobileLoginHandler = () => {
         },
         ...user,
       });
-
     } else {
       console.log('Já cadastrado');
 
-      const existingUser = Meteor.users.findOne(
-          {'services.google.id': validToken.sub});
+      const existingUser = Meteor.users.findOne({ 'services.google.id': validToken.sub });
 
       if (!existingUser) {
         user._id = Meteor.users.insert({
@@ -232,29 +220,34 @@ const registerGoogleMobileLoginHandler = () => {
         });
       } else {
         user._id = existingUser._id;
-        Meteor.users.update({_id: existingUser._id}, {
-          $set: {
-            profile: {
-              name: serviceData.name,
-              email: serviceData.email,
+        Meteor.users.update(
+          { _id: existingUser._id },
+          {
+            $set: {
+              profile: {
+                name: serviceData.name,
+                email: serviceData.email,
+              },
+              roles: existingUser.roles ? existingUser.roles : ['Usuario'],
             },
-            roles: existingUser.roles ? existingUser.roles : ['Usuario'],
           },
-        });
+        );
 
-        userprofileApi.collectionInstance.update({_id: userProfile._id}, {
-          $addToSet: {
-            otheraccounts: {
-              _id: existingUser._id,
-              service: 'google',
+        userprofileApi.collectionInstance.update(
+          { _id: userProfile._id },
+          {
+            $addToSet: {
+              otheraccounts: {
+                _id: existingUser._id,
+                service: 'google',
+              },
             },
           },
-        });
+        );
       }
-
     }
 
-    return {userId: user._id};
+    return { userId: user._id };
   });
 };
 
@@ -262,15 +255,15 @@ const init = () => {
   if (!settings || !settings.settingsGoogle) return;
 
   ServiceConfiguration.configurations.upsert(
-      {service: 'google'},
-      {
-        $set: {
-          service: 'google',
-          clientId: settings.settingsGoogle.client_id,
-          secret: settings.settingsGoogle.client_secret,
-          validClientIds: settings.settingsGoogle.validClientIds,
-        },
+    { service: 'google' },
+    {
+      $set: {
+        service: 'google',
+        clientId: settings.settingsGoogle.client_id,
+        secret: settings.settingsGoogle.client_secret,
+        validClientIds: settings.settingsGoogle.validClientIds,
       },
+    },
   );
 
   registerGoogleMobileLoginHandler();
