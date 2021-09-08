@@ -67,6 +67,7 @@ export interface UserProfile {
   photo: string;
   username: string;
   email: string;
+  sex: string; ///
   roles: [string];
   createdat: Date;
   updatedat: Date;
