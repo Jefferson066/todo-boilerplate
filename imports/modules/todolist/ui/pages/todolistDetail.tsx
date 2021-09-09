@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import { todolistApi } from '../../api/todolistApi';
+import { Meteor } from 'meteor/meteor';
+import { useTracker } from 'meteor/react-meteor-data';
 import SimpleForm from '../../../../ui/components/SimpleForm/SimpleForm';
 import Button from '@mui/material/Button';
 import FormGroup from '@mui/material/FormGroup';
@@ -20,6 +22,7 @@ import * as appStyle from '/imports/materialui/styles';
 import Print from '@material-ui/icons/Print';
 import Close from '@material-ui/icons/Close';
 import { PageLayout } from '/imports/ui/layouts/pageLayout';
+import DatePickerField from '/imports/ui/components/SimpleFormFields/DatePickerField/DatePickerField';
 
 interface ITodolistDetail {
   screenState: string;
@@ -37,7 +40,9 @@ const TodolistDetail = ({
   save,
   history,
 }: ITodolistDetail) => {
+  console.log('todolistdoc', todolistDoc);
   const handleSubmit = (doc: object) => {
+    console.log('doc', doc);
     save(doc);
   };
   return (
@@ -82,7 +87,7 @@ const TodolistDetail = ({
         <ImageCompactField label={'Imagem Zoom+Slider'} name={'image'} />
 
         <FormGroup key={'fieldsOne'}>
-          <TextField placeholder="Titulo" name="title" />
+          <TextField placeholder="Titulo " name="title" />
           <TextField placeholder="Descrição" name="description" />
         </FormGroup>
         {/*<GoogleApiWrapper*/}
@@ -92,44 +97,21 @@ const TodolistDetail = ({
           <SelectField
             placeholder="Tipo"
             options={[
-              { value: 'normal', label: 'Normal' },
-              { value: 'extra', label: 'Extra' },
+              { value: 'publica', label: 'Pública' },
+              { value: 'privada', label: 'Privada' },
             ]}
             name="type"
           />
-          <SelectField placeholder="Tipo2" id="Tipo2" name="type2" />
         </FormGroup>
-        <FormGroup key={'fieldsThree'} formType={'subform'} name={'contacts'}>
-          <TextMaskField placeholder="Telefone" name="phone" />
-          <TextMaskField placeholder="CPF" name="cpf" />
+        <FormGroup key={'fieldsThree'}>
+          <DatePickerField placeholder="Data" name="date" />
         </FormGroup>
-        <FormGroup key={'fieldsFour'} formType={'subformArray'} name={'tasks'}>
-          <TextField placeholder="Nome da Tarefa" name="name" />
-          <TextField placeholder="Descrição da Tarefa" name="description" />
-        </FormGroup>
-
-        <SliderField placeholder="Slider" name="slider" />
-
-        <ToggleSwitchField placeholder="Status da Tarefa" name="statusToggle" />
 
         <RadioButtonField
           placeholder="Opções da Tarefa"
           name="statusRadio"
-          options={[
-            { value: 'valA', label: 'Valor A' },
-            { value: 'valB', label: 'Valor B' },
-            { value: 'valC', label: 'Valor C' },
-          ]}
+          options={[{ value: 'cadastrada', label: 'Cadastrada' }]}
         />
-
-        <FormGroup key={'fields'}>
-          <AudioRecorder placeholder="Áudio" name="audio" />
-        </FormGroup>
-
-        <UploadFilesCollection name="files" label={'Arquivos'} doc={todolistDoc} />
-        <FormGroup key={'fieldsFive'} name={'chips'}>
-          <ChipInput name="chip" placeholder="Chip" />
-        </FormGroup>
         <div
           key={'Buttons'}
           style={{
@@ -188,7 +170,6 @@ export const TodolistDetailContainer = withTracker((props: ITodolistDetailContai
   const { screenState, id } = props;
   const subHandle = !!id ? todolistApi.subscribe('default', { _id: id }) : null;
   let todolistDoc = id && subHandle.ready() ? todolistApi.findOne({ _id: id }) : {};
-
   return {
     screenState,
     todolistDoc,
@@ -199,7 +180,7 @@ export const TodolistDetailContainer = withTracker((props: ITodolistDetailContai
           props.showNotification({
             type: 'success',
             title: 'Operação realizada!',
-            description: `O exemplo foi ${doc._id ? 'atualizado' : 'cadastrado'} com sucesso!`,
+            description: `A tarefa foi ${doc._id ? 'atualizada' : 'cadastrada'} com sucesso!`,
           });
         } else {
           console.log('Error:', e);
