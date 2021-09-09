@@ -140,9 +140,12 @@ export default ({
         </div>
       );
     }
-    let objValue = options
+    /*
+    let objValue = options  ESTAVA RETORNANDO UNDEFINED
       ? options.find((object) => object.label === value || object === value)
       : hasValue(value) && value;
+    */
+    let objValue = options.find((opt) => opt.value == value); // MODIFICACAO QUE EU FIZ DA VARIAVEL OBJvALUE
     if (multiple) {
       objValue = hasValue(value) && renderValue ? renderValue(value) : undefined;
 
@@ -199,7 +202,7 @@ export default ({
       </div>
     );
   }
-
+  /*
   const getLabelFromValue = (value) => {
     const objValue = otherProps.options
       ? otherProps.options.find((object) => object.label === value || object === value)
@@ -209,8 +212,8 @@ export default ({
 
   const defaultRenderValue = (values) => {
     if (multiple) {
-      return (
-        <div>
+      return (      DEPOIS QUE APAGUEI A PROP RENDER VALUE DO SELECT ABAXO ESSAS FUNÇOES
+        <div>       FICARAM SEM USO
           {values.map((value) => (
             <Chip key={value} label={getLabelFromValue(value)} />
           ))}
@@ -219,7 +222,7 @@ export default ({
     }
     return <span>{getLabelFromValue(value)}</span>;
   };
-
+*/
   const onChangeSelect = (event) => {
     if (!readOnly) {
       onChange(
@@ -265,7 +268,6 @@ export default ({
         disabled={!!readOnly}
         input={otherProps.rounded ? <RounedInput /> : <BootstrapInput />}
         multiple={multiple}
-        renderValue={renderValue || defaultRenderValue}
         {...omit(otherProps, ['options'])}
       >
         {menuNone && !multiple && (

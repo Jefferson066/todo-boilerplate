@@ -196,6 +196,7 @@ const todolistSearch = initSearch(
 
 let onSearchTodolistTyping;
 export const TodolistListContainer = withTracker((props) => {
+  console.log(props);
   //Reactive Search/Filter
   const config = subscribeConfig.get();
   const sort = {

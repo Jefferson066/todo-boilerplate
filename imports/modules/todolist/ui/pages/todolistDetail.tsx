@@ -40,7 +40,7 @@ const TodolistDetail = ({
   save,
   history,
 }: ITodolistDetail) => {
-  console.log('todolistdoc', todolistDoc);
+  //console.log('todolistdoc', todolistDoc);
   const handleSubmit = (doc: object) => {
     console.log('doc', doc);
     save(doc);
