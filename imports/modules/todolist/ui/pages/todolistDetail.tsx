@@ -107,10 +107,10 @@ const TodolistDetail = ({
           <DatePickerField placeholder="Data" name="date" />
         </FormGroup>
 
-        <RadioButtonField
-          placeholder="Opções da Tarefa"
-          name="statusRadio"
+        <SelectField
+          placeholder="Status"
           options={[{ value: 'cadastrada', label: 'Cadastrada' }]}
+          name="statusTask"
         />
         <div
           key={'Buttons'}

@@ -36,12 +36,11 @@ export const todolistSch = {
     defaultValue: '',
     optional: true,
   },
-  statusRadio: {
+  statusTask: {
     type: String,
-    label: 'Status RadioButton',
+    label: 'Status',
     defaultValue: '',
     optional: false,
-    radiosList: ['Todo', 'Doing', 'Done'],
   },
 };
 export interface ITodoList {
