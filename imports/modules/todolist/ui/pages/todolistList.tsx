@@ -109,8 +109,8 @@ const TodolistList = ({
   const callRemove = (doc) => {
     const dialogOptions = {
       icon: <Delete />,
-      title: 'Remover exemplo',
-      content: () => <p>{`Deseja remover o exemplo "${doc.title}"?`}</p>,
+      title: 'Remover Tarefa',
+      content: () => <p>{`Deseja remover a Tarefa ?"${doc.title}"?`}</p>,
       actions: ({ closeDialog }) => [
         <Button color={'secondary'} onClick={closeDialog}>
           {'Não'}
@@ -130,7 +130,7 @@ const TodolistList = ({
   };
 
   return (
-    <PageLayout title={'Lista de Exemplos'} actions={[]}>
+    <PageLayout title={'Lista de Tarefas'} actions={[]}>
       <TextField
         value={text}
         onChange={change}
@@ -223,7 +223,7 @@ export const TodolistListContainer = withTracker((props) => {
           props.showNotification({
             type: 'success',
             title: 'Operação realizada!',
-            message: `O exemplo foi removido com sucesso!`,
+            message: `A Tarefa foi removida com sucesso!`,
           });
         } else {
           console.log('Error:', e);

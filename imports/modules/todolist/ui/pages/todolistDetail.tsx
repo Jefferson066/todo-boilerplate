@@ -44,10 +44,10 @@ const TodolistDetail = ({
     <PageLayout
       title={
         screenState === 'view'
-          ? 'Visualizar exemplo'
+          ? 'Visualizar Tarefa'
           : screenState === 'edit'
-          ? 'Editar Exemplo'
-          : 'Criar exemplo'
+          ? 'Editar Tarefa'
+          : 'Criar Tarefa'
       }
       onBack={() => history.push('/todolist')}
       actions={[
