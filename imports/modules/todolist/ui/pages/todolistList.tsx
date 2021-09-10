@@ -117,7 +117,7 @@ const TodolistList = ({
         content: () => <p>{`Deseja remover a Tarefa ?"${doc.title}"?`}</p>,
         actions: ({ closeDialog }) => [
           // eslint-disable-next-line react/jsx-key
-          <Button color={'secondary'} onClick={closeDialog}>
+          <Button variant="contained" color={'secondary'} onClick={closeDialog}>
             {'Não'}
           </Button>,
           // eslint-disable-next-line react/jsx-key
@@ -126,6 +126,7 @@ const TodolistList = ({
               remove(doc);
               closeDialog();
             }}
+            variant="contained"
             color={'primary'}
           >
             {'Sim'}
@@ -139,7 +140,7 @@ const TodolistList = ({
         content: () => <p>{`Você nao tem permissão para Remover a Tarefa!`}</p>,
         actions: ({ closeDialog }) => [
           // eslint-disable-next-line react/jsx-key
-          <Button color={'secondary'} onClick={closeDialog}>
+          <Button variant="contained" color={'secondary'} onClick={closeDialog}>
             {'Ok'}
           </Button>,
         ],
