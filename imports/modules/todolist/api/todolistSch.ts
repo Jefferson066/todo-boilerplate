@@ -14,6 +14,7 @@ export const todolistSch = {
   },
   username: {
     type: String,
+    label: 'Username',
     defaultValue: '',
     optional: false,
   },

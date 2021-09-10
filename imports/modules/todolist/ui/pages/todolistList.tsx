@@ -139,7 +139,7 @@ const TodolistList = ({
         action={{ icon: 'search', onClick: click }}
       />
       <SimpleTable
-        schema={_.pick(todolistApi.schema, ['image', 'title', 'description', 'date'])}
+        schema={_.pick(todolistApi.schema, ['image', 'title', 'username', 'date'])}
         data={todolists}
         onClick={onClick}
         actions={[{ icon: <Delete />, id: 'delete', onClick: callRemove }]}
