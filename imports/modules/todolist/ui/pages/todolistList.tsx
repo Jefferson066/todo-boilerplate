@@ -18,6 +18,7 @@ import * as appStyle from '/imports/materialui/styles';
 
 import shortid from 'shortid';
 import { PageLayout } from '/imports/ui/layouts/pageLayout';
+import { Meteor } from 'meteor/meteor';
 
 interface ITodolistList {
   todolists: object[];
@@ -56,6 +57,7 @@ const useStyles = makeStyles({
 const TodolistList = ({
   todolists,
   history,
+  userId,
   remove,
   showDialog,
   onSearch,
@@ -67,7 +69,6 @@ const TodolistList = ({
   pageProperties,
 }: ITodolistList) => {
   const classes = useStyles();
-
   const idTodolist = shortid.generate();
   const onClick = (event, id, doc, showDialog) => {
     history.push('/todolist/view/' + id);
@@ -107,25 +108,43 @@ const TodolistList = ({
   };
 
   const callRemove = (doc) => {
-    const dialogOptions = {
-      icon: <Delete />,
-      title: 'Remover Tarefa',
-      content: () => <p>{`Deseja remover a Tarefa ?"${doc.title}"?`}</p>,
-      actions: ({ closeDialog }) => [
-        <Button color={'secondary'} onClick={closeDialog}>
-          {'Não'}
-        </Button>,
-        <Button
-          onClick={() => {
-            remove(doc);
-            closeDialog();
-          }}
-          color={'primary'}
-        >
-          {'Sim'}
-        </Button>,
-      ],
-    };
+    const { createdby } = doc;
+    let dialogOptions = {};
+    if (createdby === userId) {
+      dialogOptions = {
+        icon: <Delete />,
+        title: 'Remover Tarefa',
+        content: () => <p>{`Deseja remover a Tarefa ?"${doc.title}"?`}</p>,
+        actions: ({ closeDialog }) => [
+          // eslint-disable-next-line react/jsx-key
+          <Button color={'secondary'} onClick={closeDialog}>
+            {'Não'}
+          </Button>,
+          // eslint-disable-next-line react/jsx-key
+          <Button
+            onClick={() => {
+              remove(doc);
+              closeDialog();
+            }}
+            color={'primary'}
+          >
+            {'Sim'}
+          </Button>,
+        ],
+      };
+    } else {
+      dialogOptions = {
+        icon: <Delete />,
+        title: 'Você nao tem permissão!',
+        content: () => <p>{`Você nao tem permissão para Remover a Tarefa!`}</p>,
+        actions: ({ closeDialog }) => [
+          // eslint-disable-next-line react/jsx-key
+          <Button color={'secondary'} onClick={closeDialog}>
+            {'Ok'}
+          </Button>,
+        ],
+      };
+    }
     showDialog(dialogOptions);
   };
 
@@ -196,7 +215,7 @@ const todolistSearch = initSearch(
 
 let onSearchTodolistTyping;
 export const TodolistListContainer = withTracker((props) => {
-  console.log(props);
+  const userId = Meteor.userId();
   //Reactive Search/Filter
   const config = subscribeConfig.get();
   const sort = {
@@ -216,6 +235,7 @@ export const TodolistListContainer = withTracker((props) => {
   const todolists = subHandle.ready() ? todolistApi.find(filter, { sort }).fetch() : [];
 
   return {
+    userId,
     todolists,
     loading: !!subHandle && !subHandle.ready(),
     remove: (doc) => {
