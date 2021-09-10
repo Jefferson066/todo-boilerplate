@@ -142,7 +142,6 @@ export default ({
     let objValue = options
       ? options.find((object) => object.value === value || object === value)
       : hasValue(value) && value;
-    console.log(objValue);
     if (multiple) {
       objValue = hasValue(value) && renderValue ? renderValue(value) : undefined;
 

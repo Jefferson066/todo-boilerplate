@@ -36,11 +36,22 @@ const TodolistDetail = ({
   isPrintView,
   screenState,
   loading,
+  user,
   todolistDoc,
   save,
   history,
 }: ITodolistDetail) => {
-  //console.log('todolistdoc', todolistDoc);
+  const [username, setUsername] = React.useState('');
+
+  useEffect(() => {
+    if (user !== null) {
+      setUsername((u) => user.username);
+    }
+  }, [user]);
+
+  todolistDoc = { ...todolistDoc, username: username };
+
+  console.log('doc', todolistDoc);
   const handleSubmit = (doc: object) => {
     console.log('doc', doc);
     save(doc);
@@ -87,7 +98,10 @@ const TodolistDetail = ({
         <ImageCompactField label={'Imagem Zoom+Slider'} name={'image'} />
 
         <FormGroup key={'fieldsOne'}>
-          <TextField placeholder="Titulo " name="title" />
+          <TextField placeholder="Titulo" name="title" />
+
+          <input type="hidden" name="username" id="username" />
+
           <TextField placeholder="Descrição" name="description" />
         </FormGroup>
         {/*<GoogleApiWrapper*/}
@@ -168,9 +182,11 @@ interface ITodolistDetailContainer {
 
 export const TodolistDetailContainer = withTracker((props: ITodolistDetailContainer) => {
   const { screenState, id } = props;
+  const { user } = props;
   const subHandle = !!id ? todolistApi.subscribe('default', { _id: id }) : null;
   let todolistDoc = id && subHandle.ready() ? todolistApi.findOne({ _id: id }) : {};
   return {
+    user,
     screenState,
     todolistDoc,
     save: (doc, callback) =>
