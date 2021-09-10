@@ -28,7 +28,7 @@ export const todolistSch = {
     type: String,
     label: 'Tipo',
     defaultValue: '',
-    optional: false,
+    optional: true,
   },
   date: {
     type: Date,

@@ -101,6 +101,14 @@ const ExampleDetail = ({
           <SelectField
             placeholder="Tipo"
             options={[
+              { value: 'publica', label: 'Pública' },
+              { value: 'privada', label: 'Privada' },
+            ]}
+            name="type"
+          />
+          <SelectField
+            placeholder="Tipo"
+            options={[
               { value: 'normal', label: 'Normal' },
               { value: 'extra', label: 'Extra' },
             ]}
