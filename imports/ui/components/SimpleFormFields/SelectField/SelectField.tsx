@@ -92,7 +92,6 @@ export default ({
   const options = otherProps.options || (schema && schema.options ? schema.options : []);
   const multiple = otherProps.multiple || (schema && schema.multiple === true);
   const renderValue = otherProps.renderValue;
-
   if (readOnly) {
     if (multiple) {
       if (!value || value.length === 0) {
@@ -140,12 +139,10 @@ export default ({
         </div>
       );
     }
-    /*
-    let objValue = options  ESTAVA RETORNANDO UNDEFINED
-      ? options.find((object) => object.label === value || object === value)
+    let objValue = options
+      ? options.find((object) => object.value === value || object === value)
       : hasValue(value) && value;
-    */
-    let objValue = options.find((opt) => opt.value == value); // MODIFICACAO QUE EU FIZ DA VARIAVEL OBJvALUE
+    console.log(objValue);
     if (multiple) {
       objValue = hasValue(value) && renderValue ? renderValue(value) : undefined;
 
@@ -211,10 +208,10 @@ export default ({
   };
 
   const defaultRenderValue = (values) => {
-    if (multiple) {
-      return (      DEPOIS QUE APAGUEI A PROP RENDER VALUE DO SELECT ABAXO ESSAS FUNÇOES
-        <div>       FICARAM SEM USO
-          {values.map((value) => (
+    if (multiple) {   **************************************************************************
+      return (      DEPOIS QUE APAGUEI A PROP RENDER VALUE DO SELECT ABAIXO ESSAS FUNÇOES
+        <div>  FICARAM SEM USO, obs: o problema n era a rendervalue e sim a busca feita na linha 144 que foi substituida pela linha 148
+          {values.map((value) => (   ***********************************************************
             <Chip key={value} label={getLabelFromValue(value)} />
           ))}
         </div>
