@@ -33,16 +33,18 @@ const TodolistDetail = ({
   const [username, setUsername] = React.useState('');
 
   useEffect(() => {
-    if (user !== null) {
+    if (user !== null && todolistDoc === undefined) {
       setUsername((u) => user.username);
+      todolistDoc = { ...todolistDoc, username: '' };
     }
-  }, [user]);
+  }, [user, todolistDoc]);
 
-  todolistDoc = { ...todolistDoc, username: username };
+  if (username !== '') {
+    todolistDoc = { ...todolistDoc, username: username };
+    console.log(todolistDoc);
+  }
 
-  console.log('doc', todolistDoc);
   const handleSubmit = (doc: object) => {
-    console.log('doc', doc);
     save(doc);
   };
   return (
