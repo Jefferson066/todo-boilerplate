@@ -1,22 +1,11 @@
 import React, { useEffect } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import { todolistApi } from '../../api/todolistApi';
-import { Meteor } from 'meteor/meteor';
-import { useTracker } from 'meteor/react-meteor-data';
 import SimpleForm from '../../../../ui/components/SimpleForm/SimpleForm';
 import Button from '@mui/material/Button';
 import FormGroup from '@mui/material/FormGroup';
 import TextField from '/imports/ui/components/SimpleFormFields/TextField/TextField';
-import TextMaskField from '../../../../ui/components/SimpleFormFields/TextMaskField/TextMaskField';
-import ToggleSwitchField from '../../../../ui/components/SimpleFormFields/ToggleField/ToggleField';
-import RadioButtonField from '../../../../ui/components/SimpleFormFields/RadioButtonField/RadioButtonField';
-
 import SelectField from '../../../../ui/components/SimpleFormFields/SelectField/SelectField';
-import UploadFilesCollection from '../../../../ui/components/SimpleFormFields/UploadFiles/uploadFilesCollection';
-
-import ChipInput from '../../../../ui/components/SimpleFormFields/ChipInput/ChipInput';
-import SliderField from '/imports/ui/components/SimpleFormFields/SliderField/SliderField';
-import AudioRecorder from '/imports/ui/components/SimpleFormFields/AudioRecorderField/AudioRecorder';
 import ImageCompactField from '/imports/ui/components/SimpleFormFields/ImageCompactField/ImageCompactField';
 import * as appStyle from '/imports/materialui/styles';
 import Print from '@material-ui/icons/Print';
