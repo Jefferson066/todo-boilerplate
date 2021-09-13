@@ -38,10 +38,13 @@ const TodolistDetail = ({
     }
   }, [user]);
 
-  todolistDoc = user
-    ? (todolistDoc = { ...todolistDoc, username: username, statusTask: 'cadastrada' })
-    : (todolistDoc = { ...todolistDoc, username: '', value: '' });
+  if (todolistDoc === undefined) {
+    todolistDoc = user
+      ? (todolistDoc = { username: username, statusTask: 'cadastrada' })
+      : (todolistDoc = { username: '', value: '' });
+  }
 
+  console.log('doc', todolistDoc);
   const handleSubmit = (doc: object) => {
     save(doc);
   };
@@ -87,10 +90,8 @@ const TodolistDetail = ({
         <ImageCompactField label={'Imagem Zoom+Slider'} name={'image'} />
 
         <FormGroup key={'fieldsOne'}>
-          <TextField placeholder="Titulo" name="title" />
-
+          <TextField placeholder="Titulo" name="title" />.
           <input type="hidden" name="username" id="username" />
-
           <TextField placeholder="Descrição" name="description" />
         </FormGroup>
         {/*<GoogleApiWrapper*/}
