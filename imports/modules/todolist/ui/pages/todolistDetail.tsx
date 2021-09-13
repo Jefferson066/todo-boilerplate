@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { todolistApi } from '../../api/todolistApi';
 import SimpleForm from '../../../../ui/components/SimpleForm/SimpleForm';
@@ -48,14 +49,12 @@ const TodolistDetail = ({
 
   const handleStatusChange = (e, status) => {
     e.preventDefault();
-    //Meteor.call('situacao.update', _id, status);
+    Meteor.call('situacao.update', todolistDoc._id, status);
     console.log('botao clicado', status);
-    history.push('/todolist');
+    console.log(todolistDoc._id);
+    //history.push('/todolist');
   };
 
-  console.log('doc', todolistDoc);
-  console.log('screenState', screenState); // screenState view - screenState edit
-  console.log(todolistDoc.statusTask);
   const handleSubmit = (doc: object) => {
     save(doc);
   };
@@ -218,8 +217,6 @@ interface ITodolistDetailContainer {
 export const TodolistDetailContainer = withTracker((props: ITodolistDetailContainer) => {
   const { screenState, id } = props;
   const { user } = props;
-  console.log(todolistApi);
-  console.log(props);
   const subHandle = !!id ? todolistApi.subscribe('default', { _id: id }) : null;
   let todolistDoc = id && subHandle.ready() ? todolistApi.findOne({ _id: id }) : {};
   return {
