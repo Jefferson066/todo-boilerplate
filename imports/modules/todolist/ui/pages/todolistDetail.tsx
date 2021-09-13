@@ -12,6 +12,8 @@ import Print from '@material-ui/icons/Print';
 import Close from '@material-ui/icons/Close';
 import { PageLayout } from '/imports/ui/layouts/pageLayout';
 import DatePickerField from '/imports/ui/components/SimpleFormFields/DatePickerField/DatePickerField';
+import { Typography } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 
 interface ITodolistDetail {
   screenState: string;
@@ -44,7 +46,16 @@ const TodolistDetail = ({
       : (todolistDoc = { username: '', value: '' });
   }
 
+  const handleStatusChange = (e, status) => {
+    e.preventDefault();
+    //Meteor.call('situacao.update', _id, status);
+    console.log('botao clicado', status);
+    history.push('/todolist');
+  };
+
   console.log('doc', todolistDoc);
+  console.log('screenState', screenState); // screenState view - screenState edit
+  console.log(todolistDoc.statusTask);
   const handleSubmit = (doc: object) => {
     save(doc);
   };
@@ -88,9 +99,8 @@ const TodolistDetail = ({
         loading={loading}
       >
         <ImageCompactField label={'Imagem Zoom+Slider'} name={'image'} />
-
         <FormGroup key={'fieldsOne'}>
-          <TextField placeholder="Titulo" name="title" />.
+          <TextField placeholder="Titulo" name="title" />
           <input type="hidden" name="username" id="username" />
           <TextField placeholder="Descrição" name="description" />
         </FormGroup>
@@ -110,6 +120,44 @@ const TodolistDetail = ({
         <FormGroup key={'fieldsThree'}>
           <DatePickerField placeholder="Data" name="date" />
         </FormGroup>
+        {screenState == 'view' && (
+          <>
+            <Typography variant={'h6'}>{'Alterar para:'}</Typography>
+            {todolistDoc.statusTask === 'cadastrada' && (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={(e) => {
+                  handleStatusChange(e, 'andamento');
+                }}
+              >
+                Em Andamento
+              </Button>
+            )}
+            {todolistDoc.statusTask === 'andamento' && (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={(e) => {
+                  handleStatusChange(e, 'concluida');
+                }}
+              >
+                Concluída
+              </Button>
+            )}
+            {todolistDoc.statusTask === 'concluida' && (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={(e) => {
+                  handleStatusChange(e, 'cadastrada');
+                }}
+              >
+                Cadastrada
+              </Button>
+            )}
+          </>
+        )}
 
         <input type="hidden" name="statusTask" id="statusTask" />
 
@@ -170,6 +218,8 @@ interface ITodolistDetailContainer {
 export const TodolistDetailContainer = withTracker((props: ITodolistDetailContainer) => {
   const { screenState, id } = props;
   const { user } = props;
+  console.log(todolistApi);
+  console.log(props);
   const subHandle = !!id ? todolistApi.subscribe('default', { _id: id }) : null;
   let todolistDoc = id && subHandle.ready() ? todolistApi.findOne({ _id: id }) : {};
   return {
