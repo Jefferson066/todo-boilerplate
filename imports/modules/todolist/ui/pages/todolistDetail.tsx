@@ -33,16 +33,14 @@ const TodolistDetail = ({
   const [username, setUsername] = React.useState('');
 
   useEffect(() => {
-    if (user !== null && todolistDoc === undefined) {
+    if (user !== null) {
       setUsername((u) => user.username);
-      todolistDoc = { ...todolistDoc, username: '' };
     }
-  }, [user, todolistDoc]);
+  }, [user]);
 
-  if (username !== '') {
-    todolistDoc = { ...todolistDoc, username: username };
-    console.log(todolistDoc);
-  }
+  todolistDoc = user
+    ? (todolistDoc = { ...todolistDoc, username: username, statusTask: 'cadastrada' })
+    : (todolistDoc = { ...todolistDoc, username: '', value: '' });
 
   const handleSubmit = (doc: object) => {
     save(doc);
@@ -112,11 +110,8 @@ const TodolistDetail = ({
           <DatePickerField placeholder="Data" name="date" />
         </FormGroup>
 
-        <SelectField
-          placeholder="Status"
-          options={[{ value: 'cadastrada', label: 'Cadastrada' }]}
-          name="statusTask"
-        />
+        <input type="hidden" name="statusTask" id="statusTask" />
+
         <div
           key={'Buttons'}
           style={{
