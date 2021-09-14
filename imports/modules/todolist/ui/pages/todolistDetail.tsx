@@ -36,9 +36,12 @@ const TodolistDetail = ({
   history,
 }: ITodolistDetail) => {
   const [username, setUsername] = React.useState('');
+  const [userId, setUserId] = React.useState('');
   //console.log(typeof isPrintView, typeof user);
+
   useEffect(() => {
     if (user !== null) {
+      setUserId((userId) => user._id);
       setUsername((u) => user.username);
     }
   }, [user]);
@@ -194,14 +197,18 @@ const TodolistDetail = ({
           ) : null}
 
           {!isPrintView && screenState === 'view' ? (
-            <Button
-              key={'b2'}
-              onClick={() => history.push(`/todolist/edit/${todolistDoc._id}`)}
-              color={'primary'}
-              variant="contained"
-            >
-              {'Editar'}
-            </Button>
+            <>
+              {userId === todolistDoc.createdby && (
+                <Button
+                  key={'b2'}
+                  onClick={() => history.push(`/todolist/edit/${todolistDoc._id}`)}
+                  color={'primary'}
+                  variant="contained"
+                >
+                  {'Editar'}
+                </Button>
+              )}
+            </>
           ) : null}
           {!isPrintView && screenState !== 'view' ? (
             <Button key={'b3'} color={'primary'} variant="contained" submit="true">
