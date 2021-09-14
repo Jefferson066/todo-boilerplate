@@ -38,8 +38,9 @@ const TodolistDetail = ({
   const [username, setUsername] = React.useState('');
   const [userId, setUserId] = React.useState('');
   //console.log(typeof isPrintView, typeof user);
+
   const back = () => history.push(`/todolist`);
-  //{screenState === 'edit' && userId === todolistDoc.createdby ? null : back()}
+
   useEffect(() => {
     if (user !== null) {
       setUserId((userId) => user._id);
@@ -112,7 +113,9 @@ const TodolistDetail = ({
         <ImageCompactField label={'Imagem Zoom+Slider'} name={'image'} />
         <FormGroup key={'fieldsOne'}>
           <TextField placeholder="Titulo" name="title" />
+
           <input type="hidden" name="username" id="username" />
+
           <TextField placeholder="Descrição" name="description" />
         </FormGroup>
         {/*<GoogleApiWrapper*/}
@@ -139,7 +142,7 @@ const TodolistDetail = ({
                 todolistDoc.statusTask
                   ? todolistDoc.statusTask.toUpperCase()
                   : todolistDoc.statusTask
-              }, deseja alterar para:`}
+              }, deseja alterar para: `}
               {todolistDoc.statusTask === 'cadastrada' && (
                 <Button
                   variant="contained"

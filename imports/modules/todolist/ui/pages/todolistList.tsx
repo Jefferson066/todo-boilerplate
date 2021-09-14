@@ -234,9 +234,9 @@ export const TodolistListContainer = withTracker((props) => {
   };
   const limit = config.pageProperties.pageSize * config.pageProperties.currentPage;
   const skip = (config.pageProperties.currentPage - 1) * config.pageProperties.pageSize;
-
   //Collection Subscribe
-  const subHandle = todolistApi.subscribe('default', filter, { sort, limit, skip });
+  //const subHandle = todolistApi.subscribe('default', filter, { sort, limit, skip });
+  const subHandle = Meteor.subscribe('todolist.tasks.public-private', userId);
   const todolists = subHandle.ready() ? todolistApi.find(filter, { sort }).fetch() : [];
 
   return {

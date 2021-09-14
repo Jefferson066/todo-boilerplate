@@ -56,7 +56,7 @@ class UserProfileApi extends OfflineBaseApi {
         }
         return true;
       });
-    }
+    } 
 
     this.addPublication('getListOfusers', (filter = {}, options, userDoc) => {
       const queryOptions = {
