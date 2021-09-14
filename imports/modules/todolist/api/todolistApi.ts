@@ -11,13 +11,12 @@ class TodoListApi extends ApiBase {
     super('todolist', todolistSch);
     if (Meteor.isServer) {
       this.registerMethod('situacao.update', (_id, status) => {
-        console.log(_id, status, 'texto');
         check(_id, String);
         check(status, String);
 
-        if (!this.userId) {
-          throw new Meteor.Error('Not authorized!');
-        }
+        //if (!this.userId) {
+        // throw new Meteor.Error('Not authorized!');
+        //}
 
         this.collectionInstance.update(_id, {
           $set: {

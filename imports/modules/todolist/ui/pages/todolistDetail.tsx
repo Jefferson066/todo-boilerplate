@@ -46,12 +46,12 @@ const TodolistDetail = ({
       ? (todolistDoc = { username: username, statusTask: 'cadastrada' })
       : (todolistDoc = { username: '', value: '' });
   }
+  console.log(todolistDoc);
 
   const handleStatusChange = (e, status) => {
     e.preventDefault();
-    Meteor.call('situacao.update', todolistDoc._id, status);
+    Meteor.call('todolist.situacao.update', todolistDoc._id, status);
     console.log('botao clicado', status);
-    console.log(todolistDoc._id);
     //history.push('/todolist');
   };
 
@@ -121,40 +121,47 @@ const TodolistDetail = ({
         </FormGroup>
         {screenState == 'view' && (
           <>
-            <Typography variant={'h6'}>{'Alterar para:'}</Typography>
-            {todolistDoc.statusTask === 'cadastrada' && (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={(e) => {
-                  handleStatusChange(e, 'andamento');
-                }}
-              >
-                Em Andamento
-              </Button>
-            )}
-            {todolistDoc.statusTask === 'andamento' && (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={(e) => {
-                  handleStatusChange(e, 'concluida');
-                }}
-              >
-                Concluída
-              </Button>
-            )}
-            {todolistDoc.statusTask === 'concluida' && (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={(e) => {
-                  handleStatusChange(e, 'cadastrada');
-                }}
-              >
-                Cadastrada
-              </Button>
-            )}
+            <Typography variant={'h6'}>
+              {`Sua tarefa está ${
+                todolistDoc.statusTask
+                  ? todolistDoc.statusTask.toUpperCase()
+                  : todolistDoc.statusTask
+              }, deseja alterar para:`}
+              {todolistDoc.statusTask === 'cadastrada' && (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={(e) => {
+                    handleStatusChange(e, 'andamento');
+                  }}
+                >
+                  Em Andamento
+                </Button>
+              )}
+              {todolistDoc.statusTask === 'andamento' && (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={(e) => {
+                    handleStatusChange(e, 'concluida');
+                  }}
+                >
+                  Concluída
+                </Button>
+              )}
+              {todolistDoc.statusTask === 'concluida' && (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={(e) => {
+                    handleStatusChange(e, 'cadastrada');
+                  }}
+                >
+                  Cadastrada
+                </Button>
+              )}
+              {'?'}
+            </Typography>
           </>
         )}
 
