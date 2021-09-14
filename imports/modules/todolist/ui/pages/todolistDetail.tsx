@@ -38,7 +38,8 @@ const TodolistDetail = ({
   const [username, setUsername] = React.useState('');
   const [userId, setUserId] = React.useState('');
   //console.log(typeof isPrintView, typeof user);
-
+  const back = () => history.push(`/todolist`);
+  //{screenState === 'edit' && userId === todolistDoc.createdby ? null : back()}
   useEffect(() => {
     if (user !== null) {
       setUserId((userId) => user._id);
@@ -93,6 +94,14 @@ const TodolistDetail = ({
         ),
       ]}
     >
+      {userId
+        ? todolistDoc.createdby
+          ? screenState === 'edit' && userId !== todolistDoc.createdby
+            ? back()
+            : null
+          : null
+        : null}
+
       <SimpleForm
         mode={screenState}
         schema={todolistApi.schema}
