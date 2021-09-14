@@ -23,6 +23,7 @@ import { Meteor } from 'meteor/meteor';
 interface ITodolistList {
   todolists: object[];
   history: object;
+  userId: string;
   remove: (doc: object) => void;
   showDialog: (dialog: object) => void;
   onSearch: (text?: string) => void;
@@ -70,6 +71,9 @@ const TodolistList = ({
 }: ITodolistList) => {
   const classes = useStyles();
   const idTodolist = shortid.generate();
+
+  //console.log(typeof userId);
+
   const onClick = (event, id, doc, showDialog) => {
     history.push('/todolist/view/' + id);
   };

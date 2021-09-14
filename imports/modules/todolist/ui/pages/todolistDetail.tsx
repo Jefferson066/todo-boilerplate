@@ -14,7 +14,7 @@ import Close from '@material-ui/icons/Close';
 import { PageLayout } from '/imports/ui/layouts/pageLayout';
 import DatePickerField from '/imports/ui/components/SimpleFormFields/DatePickerField/DatePickerField';
 import { Typography } from '@material-ui/core';
-import { Button } from '@material-ui/core';
+//import { Button } from '@material-ui/core';
 
 interface ITodolistDetail {
   screenState: string;
@@ -22,6 +22,8 @@ interface ITodolistDetail {
   todolistDoc: object;
   save: { (doc: object, callback?: {}): void };
   history: { push(url: string): void };
+  isPrintView: boolean;
+  user: object;
 }
 
 const TodolistDetail = ({
@@ -34,7 +36,7 @@ const TodolistDetail = ({
   history,
 }: ITodolistDetail) => {
   const [username, setUsername] = React.useState('');
-
+  //console.log(typeof isPrintView, typeof user);
   useEffect(() => {
     if (user !== null) {
       setUsername((u) => user.username);
@@ -46,12 +48,10 @@ const TodolistDetail = ({
       ? (todolistDoc = { username: username, statusTask: 'cadastrada' })
       : (todolistDoc = { username: '', value: '' });
   }
-  console.log(todolistDoc);
 
   const handleStatusChange = (e, status) => {
     e.preventDefault();
     Meteor.call('todolist.situacao.update', todolistDoc._id, status);
-    console.log('botao clicado', status);
     //history.push('/todolist');
   };
 
