@@ -91,7 +91,7 @@ export const UserProfileDetailContainer = withTracker((props) => {
   const { screenState, id } = props;
   const subHandle = userprofileApi.subscribe('default', { _id: id });
   const user = subHandle.ready() ? userprofileApi.findOne({ _id: id }) : {};
-
+  console.log(user);
   return {
     screenState,
     user,

@@ -1098,7 +1098,7 @@ export class ApiBase {
    * @param  {} api='default'
    * @param  {} ...param
    */
-  subscribe(api = 'default', ...param) {
+  subscribe(api = 'default', ...param) { 
     const self = this;
     if (Meteor.isClient) {
       const subsHandle = Meteor.subscribe(`${this.collectionName}.${api}`, ...param);

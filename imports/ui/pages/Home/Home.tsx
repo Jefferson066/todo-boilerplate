@@ -1,18 +1,60 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import { userprofileApi } from '/imports/userprofile/api/UserProfileApi';
 import Link from '@material-ui/core/Link';
+import _ from 'lodash';
 import { Link as RouterLink } from 'react-router-dom';
 import Container from '@mui/material/Container';
-import { Meteor } from 'meteor/meteor';
-import * as appStyle from '/imports/materialui/styles';
+import { SimpleCard } from '../../components/card';
+import { CardButton } from '../../components/CardButton';
+import { Typography } from '@material-ui/core';
+//import * as appStyle from '/imports/materialui/styles';
 
 const Home = () => {
   const userId = Meteor.userId();
-  console.log(userId);
+  const subHandle = userprofileApi.subscribe('default', { _id: userId });
+  const user = subHandle.ready() ? userprofileApi.findOne({ _id: userId }) : {};
+
+  console.log(user.username);
   return (
     <>
       {userId ? (
         <Container>
-          <h1>Dashboard</h1>
+          <div
+            style={{
+              display: 'flex',
+              'flex-direction': 'row',
+              'justify-content': 'center',
+              'margin-top': '70px',
+            }}
+          >
+            <Typography variant={'h5'}>
+              {`Olá ${user ? user.username : null}, seja bem vindo ao Todo List!`}
+            </Typography>
+          </div>
+
+          <div
+            style={{
+              display: 'flex',
+              'flex-direction': 'row',
+              'justify-content': 'center',
+              'margin-top': '30px',
+            }}
+          >
+            <SimpleCard title={'Cadastradas'} textValue={'66'} />
+            <SimpleCard title={'Andamento'} textValue={'77'} />
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              'flex-direction': 'row',
+              'justify-content': 'center',
+              'margin-top': '20px',
+            }}
+          >
+            <SimpleCard title={'Cadastradas'} textValue={'88'} />
+            <CardButton title={'Visualizar Tarefas'} />
+          </div>
         </Container>
       ) : (
         <Container>
