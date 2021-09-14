@@ -122,7 +122,8 @@ const TodolistDetail = ({
         <FormGroup key={'fieldsThree'}>
           <DatePickerField placeholder="Data" name="date" />
         </FormGroup>
-        {screenState == 'view' && (
+
+        {screenState == 'view' && userId === todolistDoc.createdby ? (
           <>
             <Typography variant={'h6'}>
               {`Sua tarefa está ${
@@ -166,7 +167,7 @@ const TodolistDetail = ({
               {'?'}
             </Typography>
           </>
-        )}
+        ) : null}
 
         <input type="hidden" name="statusTask" id="statusTask" />
 
