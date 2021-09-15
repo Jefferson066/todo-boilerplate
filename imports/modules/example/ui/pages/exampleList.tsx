@@ -18,6 +18,7 @@ import * as appStyle from '/imports/materialui/styles';
 
 import shortid from 'shortid';
 import { PageLayout } from '/imports/ui/layouts/pageLayout';
+import { MyCheckbox } from '/imports/ui/components/CheckBoxCompletedTask';
 
 interface IExampleList {
   examples: object[];
@@ -67,9 +68,13 @@ const ExampleList = ({
   pageProperties,
 }: IExampleList) => {
   const classes = useStyles();
-
-  //console.log('total=', total, 'pageProperties', pageProperties);
-
+  //******************checkbox *******************/
+  const [stateCheck, setStateCheck] = React.useState(false); // estado do CHECKBOX
+  const handleChangecompleted = (e) => {
+    setStateCheck(!stateCheck);
+  };
+  console.log(stateCheck);
+//*******************************************/
   const idExample = shortid.generate();
   const onClick = (event, id, doc, showDialog) => {
     history.push('/example/view/' + id);
@@ -142,6 +147,7 @@ const ExampleList = ({
         placeholder="Pesquisar..."
         action={{ icon: 'search', onClick: click }}
       />
+      <MyCheckbox state={stateCheck} handleChangecompleted={handleChangecompleted} />
       <SimpleTable
         schema={_.pick(exampleApi.schema, ['image', 'title', 'description', 'date'])}
         data={examples}
