@@ -241,28 +241,31 @@ export const TodolistListContainer = withTracker((props) => {
   ///********************************************** */
 
   //Subscribe parameters
-  const filter = {
+  const filterTasks = {
     ...config.filter,
-    ...{
-      $or: [{ type: 'publica' }, { createdby: userId, type: 'privada' }],
-    },
+    $or: [{ type: 'publica' }, { createdby: userId, type: 'privada' }],
   };
 
   const filterCheckCompleted = {
     ...config.filter,
     ...{
-      // funcionando
       $or: [{ type: 'publica' }, { createdby: userId, type: 'privada' }],
       $and: [{ statusTask: 'concluida' }], // busca para so concluidas
     },
   };
 
+  let filtro = {};
+  if (!stateCheck) {
+    filtro = { ...filterTasks };
+  } else {
+    filtro = { ...filterCheckCompleted };
+  }
   const limit = config.pageProperties.pageSize;
   const skip = (config.pageProperties.currentPage - 1) * config.pageProperties.pageSize;
   //Collection Subscribe
-  const subHandle = todolistApi.subscribe('default', filter, { sort, limit, skip });
+  const subHandle = todolistApi.subscribe('default', filtro, { sort, limit, skip });
   //const subHandle = Meteor.subscribe('todolist.tasks.public-private', userId);
-  const todolists = subHandle.ready() ? todolistApi.find(filter, { sort }).fetch() : [];
+  const todolists = subHandle.ready() ? todolistApi.find(filtro, { sort }).fetch() : [];
 
   return {
     stateCheck,
@@ -290,7 +293,7 @@ export const TodolistListContainer = withTracker((props) => {
     },
     searchBy: config.searchBy,
     onSearch: (...params) => {
-      onSearchTodolistTyping && clearTimeout(onSearchTodolistTyping); /////////////
+      onSearchTodolistTyping && clearTimeout(onSearchTodolistTyping);
       onSearchTodolistTyping = setTimeout(() => {
         config.pageProperties.currentPage = 1;
         subscribeConfig.set(config);
@@ -299,14 +302,14 @@ export const TodolistListContainer = withTracker((props) => {
     },
     total: subHandle ? subHandle.total : todolists.length,
     pageProperties: config.pageProperties,
-    filter,
+    filtro,
     sort,
     setPage: (page = 1) => {
       config.pageProperties.currentPage = page;
       subscribeConfig.set(config);
     },
     setFilter: (newFilter = {}) => {
-      config.filter = { ...filter, ...newFilter };
+      config.filter = { ...filtro, ...newFilter };
       Object.keys(config.filter).forEach((key) => {
         if (config.filter[key] === null || config.filter[key] === undefined) {
           delete config.filter[key];
