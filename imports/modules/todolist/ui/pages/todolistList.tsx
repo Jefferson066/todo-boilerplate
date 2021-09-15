@@ -19,6 +19,7 @@ import * as appStyle from '/imports/materialui/styles';
 import shortid from 'shortid';
 import { PageLayout } from '/imports/ui/layouts/pageLayout';
 import { Meteor } from 'meteor/meteor';
+import { MyCheckbox } from '/imports/ui/components/CheckBoxCompletedTask';
 
 interface ITodolistList {
   todolists: object[];
@@ -68,6 +69,8 @@ const TodolistList = ({
   setPageSize,
   searchBy,
   pageProperties,
+  stateCheck,
+  handleChangecompleted,
 }: ITodolistList) => {
   const classes = useStyles();
   const idTodolist = shortid.generate();
@@ -162,6 +165,7 @@ const TodolistList = ({
         placeholder="Pesquisar..."
         action={{ icon: 'search', onClick: click }}
       />
+      <MyCheckbox state={stateCheck} handleChangecompleted={handleChangecompleted} />
       <SimpleTable
         schema={_.pick(todolistApi.schema, ['image', 'title', 'username', 'date'])}
         data={todolists}
@@ -228,6 +232,14 @@ export const TodolistListContainer = withTracker((props) => {
   };
   todolistSearch.setActualConfig(config);
 
+  ////*************checkbox****************** */
+  const [stateCheck, setStateCheck] = React.useState(false); // estado do CHECKBOX
+  const handleChangecompleted = (e) => {
+    setStateCheck(!stateCheck);
+  };
+  console.log(stateCheck);
+  ///********************************************** */
+
   //Subscribe parameters
   const filter = {
     ...config.filter,
@@ -253,6 +265,8 @@ export const TodolistListContainer = withTracker((props) => {
   const todolists = subHandle.ready() ? todolistApi.find(filter, { sort }).fetch() : [];
 
   return {
+    stateCheck,
+    handleChangecompleted,
     userId,
     todolists,
     loading: !!subHandle && !subHandle.ready(),

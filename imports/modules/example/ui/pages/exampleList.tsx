@@ -66,14 +66,16 @@ const ExampleList = ({
   setPageSize,
   searchBy,
   pageProperties,
+  stateCheck,
+  handleChangecompleted,
 }: IExampleList) => {
   const classes = useStyles();
   //******************checkbox *******************/
-  const [stateCheck, setStateCheck] = React.useState(false); // estado do CHECKBOX
-  const handleChangecompleted = (e) => {
-    setStateCheck(!stateCheck);
-  };
-  console.log(stateCheck);
+  //const [stateCheck, setStateCheck] = React.useState(false); // estado do CHECKBOX
+  //const handleChangecompleted = (e) => {
+  //  setStateCheck(!stateCheck);
+  //};
+  //console.log(stateCheck);
 //*******************************************/
   const idExample = shortid.generate();
   const onClick = (event, id, doc, showDialog) => {
@@ -173,7 +175,7 @@ const ExampleList = ({
           page={pageProperties.currentPage - 1}
           onPageChange={handleChangePage} // onChangePage aterado para onPageChange
           onRowsPerPageChange={handleChangeRowsPerPage} //onChangeRowsPerPage alterado para onRowsPerPageChange
-          labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
+          labelDisplayedRows={({ from, to, count }) => `${from}-${to} de1 ${count}`}
           SelectProps={{
             inputProps: { 'aria-label': 'rows per page' },
             MenuProps: { classes: { paper: classes.selectDropdown } },
@@ -234,7 +236,15 @@ export const ExampleListContainer = withTracker((props) => {
   const subHandle = exampleApi.subscribe('default', filter, { sort, limit, skip });
   const examples = subHandle.ready() ? exampleApi.find(filter, { sort }).fetch() : [];
 
+ ////*************checkbox****************** */
+  const [stateCheck, setStateCheck] = React.useState(false); // estado do CHECKBOX
+  const handleChangecompleted = (e) => {
+    setStateCheck(!stateCheck);
+  };
+
   return {
+    stateCheck,
+    handleChangecompleted,
     examples,
     loading: !!subHandle && !subHandle.ready(),
     remove: (doc) => {
