@@ -235,15 +235,16 @@ export const TodolistListContainer = withTracker((props) => {
       $or: [{ type: 'publica' }, { createdby: userId, type: 'privada' }],
     },
   };
-  /*
+
   const filterCheckCompleted = {
     ...config.filter,
-    ...{ // erro
-      $or: [{ type: 'publica' }, { createdby: userId, type: 'pessoal' }],
+    ...{
+      // funcionando
+      $or: [{ type: 'publica' }, { createdby: userId, type: 'privada' }],
       $and: [{ statusTask: 'concluida' }], // busca para so concluidas
     },
   };
-  */
+
   const limit = config.pageProperties.pageSize;
   const skip = (config.pageProperties.currentPage - 1) * config.pageProperties.pageSize;
   //Collection Subscribe
