@@ -27,8 +27,7 @@ const Home = () => {
   const todolists = subHandleTask.ready()
     ? todolistApi.find(filterTasksPublicAndPrivate, {}).fetch()
     : [];
-  console.log(todolists);
-  useEffect(() => {});
+
   let registeredTasks = todolists.filter((obj) => obj.statusTask === 'cadastrada');
   let tasksProgress = todolists.filter((obj) => obj.statusTask === 'andamento');
   let completedTasks = todolists.filter((obj) => obj.statusTask === 'concluida');
