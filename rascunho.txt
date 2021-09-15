@@ -28,10 +28,17 @@ const Home = () => {
     ? todolistApi.find(filterTasksPublicAndPrivate, {}).fetch()
     : [];
   console.log(todolists);
-  useEffect(() => {});
   let registeredTasks = todolists.filter((obj) => obj.statusTask === 'cadastrada');
   let tasksProgress = todolists.filter((obj) => obj.statusTask === 'andamento');
   let completedTasks = todolists.filter((obj) => obj.statusTask === 'concluida');
+  useEffect(()=>{
+    if(todolists){
+      registeredTasks = todolists.filter((obj) => obj.statusTask === 'cadastrada');
+      tasksProgress = todolists.filter((obj) => obj.statusTask === 'andamento');
+  let completedTasks = todolists.filter((obj) => obj.statusTask === 'concluida');
+    }
+  },[todolists]);
+
   /////////////////////////////////
 
   return (
