@@ -83,7 +83,7 @@ const TodolistList = ({
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setPageSize(parseInt(event.target.value, 10));
+    setPageSize(parseInt(event.target.value, 4));
     setPage(1);
   };
   const [text, setText] = React.useState(searchBy || '');
@@ -173,14 +173,14 @@ const TodolistList = ({
       >
         <TablePagination
           style={{ width: 'fit-content', overflow: 'unset' }}
-          rowsPerPageOptions={[10, 25, 50, 100]}
+          rowsPerPageOptions={[4, 10, 25, 50, 100]}
           labelRowsPerPage={<div style={{ width: 0, padding: 0, margin: 0 }} />}
           component="div"
           count={total}
           rowsPerPage={pageProperties.pageSize}
           page={pageProperties.currentPage - 1}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
+          onPageChange={handleChangePage} // onChangePage aterado para onPageChange
+          onRowsPerPageChange={handleChangeRowsPerPage} //onChangeRowsPerPage alterado para onRowsPerPageChange
           labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
           SelectProps={{
             inputProps: { 'aria-label': 'rows per page' },
@@ -205,7 +205,7 @@ const TodolistList = ({
 export const subscribeConfig = new ReactiveVar({
   pageProperties: {
     currentPage: 1,
-    pageSize: 25,
+    pageSize: 4,
   },
   sortProperties: { field: 'createdat', sortAscending: true },
   filter: {},
@@ -235,7 +235,7 @@ export const TodolistListContainer = withTracker((props) => {
       $or: [{ type: 'publica' }, { createdby: userId, type: 'privada' }],
     },
   };
-  const limit = config.pageProperties.pageSize * config.pageProperties.currentPage;
+  const limit = config.pageProperties.pageSize;
   const skip = (config.pageProperties.currentPage - 1) * config.pageProperties.pageSize;
   //Collection Subscribe
   const subHandle = todolistApi.subscribe('default', filter, { sort, limit, skip });
@@ -294,7 +294,7 @@ export const TodolistListContainer = withTracker((props) => {
       config.sort = sort;
       subscribeConfig.set(config);
     },
-    setPageSize: (size = 25) => {
+    setPageSize: (size = 4) => {
       config.pageProperties.pageSize = size;
       subscribeConfig.set(config);
     },

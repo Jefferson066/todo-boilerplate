@@ -25,13 +25,6 @@ class TodoListApi extends ApiBase {
         });
       });
     }
-    /*
-    this.addPublication('tasks.public-private', (userId) => {
-      return this.collectionInstance.find({
-        $or: [{ type: 'publica' }, { createdby: userId, type: 'privada' }],
-      });
-    });
-    */
   }
 }
 
